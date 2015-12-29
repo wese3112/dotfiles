@@ -4,11 +4,7 @@ execute pathogen#infect()
 
 " enable syntax and colorscheme
 syntax enable
-colorscheme kolor
-
-" highlight tailing whitespaces
-"autocmd InsertLeave * match ExtraWhitespace /\s\+$/
-"autocmd ColorScheme * highlight ExtraWhitespace ctermbg=red guibg=red
+colorscheme desert
 
 set wrap!
 "set wm=0
@@ -18,9 +14,10 @@ set ts=4
 set sw=4
 set mouse=a
 set autoindent
+set autochdir
 set ignorecase " Groß/Kleinschreibung beim suchen missachten
 set foldmethod=marker
-"filetype indent on
+filetype indent on
 filetype plugin on
 
 if has("gui_running")
@@ -57,7 +54,7 @@ noremap <Space> i<Space><Esc>l
 noremap <Leader>s <Esc>:w<CR>
 noremap <leader>q <Esc>:q<CR>
 noremap <leader>m <Esc>:w<CR>:make<CR>
-noremap <leader>n <Esc>:NERDTreeToggle<CR>
+noremap N <Esc>:NERDTreeToggle<CR>
 
 noremap <Leader>d "_d
 noremap <leader>f /
@@ -68,7 +65,6 @@ noremap # `
 
 " find word under cursor, show with context
 noremap // :g/<C-R><C-W>/z#.3<CR>
-noremap <leader>G <Esc>:Grep<CR>
 
 noremap <F2> <Esc>:cnext<CR>
 noremap <F3> <Esc>:cprev<CR>
@@ -121,38 +117,11 @@ inoremap ""     "
 inoremap '      ''<Left>
 inoremap ''     '
 
-" language specific maps
-" latex specific macros
-"let @r='0/label€ýc€ýb{llllllyi€ýc€ýb{#mi€ýc€ýb\ref€ýc€ýb{p'
-" Wort nach links: dawbbelpb
-noremap <F8> dawbbelpb
-" Wort nach rechts: dawelpb
-noremap <F9> dawelpb
-"inoremap ,, \
-"inoremap .. {}<left>
-"inoremap $$ $
-"inoremap $ $$<Left>
-"inoremap <leader>c $^\circ$
-"so ~/.vim/atprc.vim
-
-" others
-"highlight ColorColumn ctermbg=magenta
-"call matchadd('ColorColumn', '\%81v', 100)
-
-
-"autocmd BufNewFile,BufReadPost *.ino,*.pde set filetype=cpp
+autocmd BufNewFile,BufReadPost *.ino,*.pde set filetype=cpp
 
 ""let g:EasyMotion_keys='hklyuionmwertzxcvbasdgjf,'
 let g:EasyMotion_keys='abcdefghijklmnorstuvw,'
 
-" example of setting your own highlighting
-":syn match ToDo "todo"
-":hi def ToDo guibg=#e0e0e0
-
 nmap <leader>u <Esc>:let @/=""<CR>
-
-"autocmd VimEnter * NERDTree
-autocmd VimEnter * AddTabularPattern is /=
-autocmd VimEnter * AddTabularPattern mc /%
 
 autocmd bufwritepost .vimrc source $MYVIMRC
