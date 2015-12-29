@@ -41,6 +41,7 @@ set clipboard=unnamed
 "autocmd! BufNewFile,BufRead *.ino setlocal ft=arduino
 "autocmd! BufNewFile,BufRead *.pde setlocal ft=arduino
 set runtimepath^=.vim/bundle/vim-startify
+set runtimepath^=.vim/bundle/ctrlp.vim
 
 " mappings -----------------------------------------------------
 let mapleader=","
