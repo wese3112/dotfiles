@@ -22,6 +22,10 @@ git clone https://github.com/easymotion/vim-easymotion.git
 echo "${RED}+ ${GREEN}Airline plugin${NC}"
 git clone https://github.com/bling/vim-airline.git
 #pip install --user powerline-status
+echo "${RED}+++ ${GREEN}PowerLine Fonts for Airline${NC}"
+git clone https://github.com/Lokaltog/powerline-fonts.git
+echo "${RED}+++ ${GREEN}Install PowerLine Fonts for Airline${NC}"
+sh ~/.vim/bundle/powerline-fonts/install.sh
 echo "${RED}+ ${GREEN}CTRL-P plugin${NC}"
 git clone https://github.com/ctrlpvim/ctrlp.vim.git
 echo "${RED}+ ${GREEN}Startify plugin${NC}"

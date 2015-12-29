@@ -20,18 +20,15 @@ set foldmethod=marker
 filetype indent on
 filetype plugin on
 
-if has("gui_running")
-	"set guifont=Source\ Code\ Pro\ 12
-	set guifont=Source\ Code\ Pro\ for\ Powerline\ 12
-	"set guifont=Source\ Code\ Pro\ for\ Powerline
-endif
+"set guifont=Meslo\ LG\ S\ DZ\ for\ Powerline
+set guifont=Source\ Code\ Pro\ for\ Powerline
 
 if $COLORTERM == 'gnome-terminal'
 	set t_Co=256
 endif
 
-" powerline settings
-let g:Powerline_symbols = 'fancy'
+" airline settings
+let g:airline_powerline_fonts = 1
 set nocompatible   " Disable vi-compatibility
 set laststatus=2   " Always show the statusline
 set encoding=utf-8 " Necessary to show Unicode glyphs
