@@ -30,3 +30,5 @@ echo "${RED}+ ${GREEN}CTRL-P plugin${NC}"
 git clone https://github.com/ctrlpvim/ctrlp.vim.git
 echo "${RED}+ ${GREEN}Startify plugin${NC}"
 git clone https://github.com/mhinz/vim-startify.git
+echo "${RED}+ ${GREEN}Python-mode plugin${NC}"
+git clone https://github.com/klen/python-mode.git
