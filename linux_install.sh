@@ -30,5 +30,9 @@ echo "${RED}+ ${GREEN}CTRL-P plugin${NC}"
 git clone https://github.com/ctrlpvim/ctrlp.vim.git
 echo "${RED}+ ${GREEN}Startify plugin${NC}"
 git clone https://github.com/mhinz/vim-startify.git
-echo "${RED}+ ${GREEN}Python-mode plugin${NC}"
-git clone https://github.com/klen/python-mode.git
+echo "${RED}+ ${GREEN}Multiple cursors plugin${NC}"
+git clone https://github.com/terryma/vim-multiple-cursors.git
+
+echo "${RED}>> ${GREEN}installing colorscheme${NC}"
+echo "${RED}+ ${GREEN}Colorscheme tender${NC}"
+git clone https://github.com/jacoborus/tender.git

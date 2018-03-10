@@ -4,7 +4,7 @@ execute pathogen#infect()
 
 " enable syntax and colorscheme
 syntax enable
-colorscheme desert
+colorscheme tender
 
 set wrap!
 "set wm=0
@@ -21,7 +21,7 @@ filetype indent on
 filetype plugin on
 
 "set guifont=Meslo\ LG\ S\ DZ\ for\ Powerline
-set guifont=Source\ Code\ Pro\ for\ Powerline
+set guifont=Source\ Code\ Pro\ for\ Powerline\ 14
 
 if $COLORTERM == 'gnome-terminal'
 	set t_Co=256
@@ -47,7 +47,7 @@ let mapleader=","
 noremap <leader>vimrc :tabe ~/.vimrc<cr>
 
 noremap <CR> o<Esc>
-noremap <Space> i<Space><Esc>l
+noremap <Space> a<Space><Esc>l
 
 noremap <Leader>s <Esc>:w<CR>
 noremap <leader>q <Esc>:q<CR>
