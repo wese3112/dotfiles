@@ -96,16 +96,19 @@ vnoremap <C-Down> xp`[V`]
 inoremap <leader>. <Esc>
 inoremap <C-Space> <Esc>la
 
+inoremap <C-k>  {}<Left>
 inoremap {      {}<Left>
 inoremap {<CR>  {<CR>}<Esc>O<Tab>
 inoremap {{     {
 inoremap {}     {}
 
+inoremap <C-j>  ()<Left>
 inoremap (      ()<Left>
 inoremap (<CR>  (<CR>)<Esc>O<Tab>
 inoremap ((     (
 inoremap ()     ()
 
+inoremap <C-l>  []<Left>
 inoremap [      []<Left>
 inoremap [<CR>  [<CR>]<Esc>O<Tab>
 inoremap [[     [
