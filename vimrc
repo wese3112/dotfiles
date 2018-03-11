@@ -17,6 +17,7 @@ set autoindent
 set autochdir
 set ignorecase " Groﬂ/Kleinschreibung beim suchen missachten
 set foldmethod=marker
+set noeb vb t_vb=  " disable error bell etc.
 filetype indent on
 filetype plugin on
 
