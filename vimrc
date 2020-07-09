@@ -15,7 +15,7 @@ set sw=4
 set mouse=a
 set autoindent
 set autochdir
-set ignorecase " Groﬂ/Kleinschreibung beim suchen missachten
+set ignorecase " Gro√ü/Kleinschreibung beim suchen missachten
 set foldmethod=marker
 set noeb vb t_vb=  " disable error bell etc.
 filetype indent on
@@ -86,7 +86,7 @@ noremap <leader>wj :split <C-w><C-j>
 "noremap <leader>e <Esc>:tabp<CR>
 
 " visual map
-"vnoremap <leader>. <Esc>
+vnoremap <leader>. <Esc>
 vnoremap < <gv
 vnoremap > >gv
 vnoremap <C-Up> xkP`[V`]
