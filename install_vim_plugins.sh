@@ -31,7 +31,7 @@ git clone https://github.com/ctrlpvim/ctrlp.vim.git
 echo "${RED}+ ${GREEN}Startify plugin${NC}"
 git clone https://github.com/mhinz/vim-startify.git
 echo "${RED}+ ${GREEN}Multiple cursors plugin${NC}"
-git clone https://github.com/terryma/vim-multiple-cursors.git
+git clone https://github.com/mg979/vim-visual-multi.git
 
 echo "${RED}>> ${GREEN}installing colorscheme${NC}"
 echo "${RED}+ ${GREEN}Colorscheme tender${NC}"
