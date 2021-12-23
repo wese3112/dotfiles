@@ -14,6 +14,8 @@ Plug 'mg979/vim-visual-multi'
 Plug 'tpope/vim-fugitive'
 Plug 'airblade/vim-gitgutter'
 Plug 'ggandor/lightspeed.nvim'
+Plug 'voldikss/vim-floaterm'
+Plug 'dominikduda/vim_current_word'
 
 " colorschemes
 Plug 'jacoborus/tender'
@@ -24,7 +26,12 @@ Plug 'tomasiser/vim-code-dark'
 call plug#end()
 
 let g:gitgutter_git_excecutable = 'C:\Program Files\Git\bin\git.exe'
+let g:gitgutter_sign_added = '▌'
+let g:gitgutter_sign_modified = '▌'
+
 lua require('lspconfig').tsserver.setup{}
+lua require('lspconfig').clangd.setup{}
+lua require('lspconfig').rust_analyzer.setup{}
 lua require('which-key').setup{}
 
 colorscheme onedark
@@ -34,7 +41,6 @@ set ts=4
 set sw=4
 set number
 set relativenumber
-set hlsearch
 set autoindent
 set autochdir
 set noeb vb t_vb=  " disable error bell etc.
@@ -46,6 +52,7 @@ set mouse=a
 set nowrap
 set splitbelow
 set splitright
+set signcolumn=yes
 filetype plugin on
 
 " mapping
@@ -58,13 +65,16 @@ nnoremap <leader>et <Esc>:NERDTreeToggle<CR>
 nnoremap <leader>ef <Esc>:NERDTreeFocus<CR>
 nnoremap <leader>w <Esc>:w<CR>
 nnoremap <leader>q <Esc>:q<CR>
+nnoremap <leader>ve <Esc>:tabe ~/AppData/Local/nvim/init.vim<CR>
+nnoremap <leader>vg <Esc>:tabe ~/AppData/Local/nvim/ginit.vim<CR>
+nnoremap <leader>vs <Esc>:source ~/AppData/Local/nvim/init.vim<CR>
 nnoremap < <<
 nnoremap > >>
 
 " quickfix list
 nnoremap <leader>c :copen<CR>
-nnoremap <down> :cn<CR>
-nnoremap <up> :cp<CR>
+nnoremap <down> :cn<CR>zz
+nnoremap <up> :cp<CR>zz
 
 " change windows
 nnoremap H <C-w>h
@@ -77,6 +87,7 @@ map <F3> :vimgrep //j **<left><left><left><left><left>
 
 nnoremap <leader>gs :G<CR>
 nnoremap <leader>gd :Gdiff<CR>
+nnoremap <leader>gb :Git blame<CR>
 
 " visual map
 vnoremap <leader>. <Esc>
