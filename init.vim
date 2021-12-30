@@ -1,21 +1,43 @@
 call plug#begin('~\AppData\Local\nvim\plugged')
 
+" must keep plugins
+Plug 'romainl/vim-cool' " removes search highlight after movement
+Plug 'scrooloose/nerdcommenter'
+Plug 'mg979/vim-visual-multi'
+
+" language tools
 Plug 'williamboman/nvim-lsp-installer'
 Plug 'neovim/nvim-lspconfig'
-Plug 'nvim-lua/completion-nvim'
-Plug 'folke/which-key.nvim'
+Plug 'nvim-treesitter/nvim-treesitter', { 'do': ':TSUpdate' }
+
+" editing & navigating
+Plug 'tpope/vim-surround'
+"Plug 'ggandor/lightspeed.nvim'
+Plug 'justinmk/vim-sneak'
+Plug 'yamatsum/nvim-cursorline'
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
-Plug 'scrooloose/nerdtree'
-Plug 'scrooloose/nerdcommenter'
-Plug 'bling/vim-airline'
-Plug 'ctrlpvim/ctrlp.vim'
+"Plug 'nvim-lua/completion-nvim'
+
+" ui plugins
+Plug 'folke/which-key.nvim'
+"Plug 'bling/vim-airline'
+"Plug 'vim-airline/vim-airline-themes'
+Plug 'nvim-lualine/lualine.nvim'
+
+" utility plugins
+Plug 'nvim-lua/plenary.nvim'
+Plug 'kyazdani42/nvim-web-devicons'
+
+" file browsing & operating system
 Plug 'mhinz/vim-startify'
-Plug 'mg979/vim-visual-multi'
+Plug 'ctrlpvim/ctrlp.vim'
+Plug 'nvim-telescope/telescope.nvim'
+"Plug 'scrooloose/nerdtree'
+Plug 'voldikss/vim-floaterm'
+
+" git
 Plug 'tpope/vim-fugitive'
 Plug 'airblade/vim-gitgutter'
-Plug 'ggandor/lightspeed.nvim'
-Plug 'voldikss/vim-floaterm'
-Plug 'dominikduda/vim_current_word'
 
 " colorschemes
 Plug 'jacoborus/tender'
@@ -29,10 +51,20 @@ let g:gitgutter_git_excecutable = 'C:\Program Files\Git\bin\git.exe'
 let g:gitgutter_sign_added = '▌'
 let g:gitgutter_sign_modified = '▌'
 
+let g:airline_powerline_fonts = 1
+
+let g:floaterm_keymap_new = '<F5>'
+let g:floaterm_keymap_kill = '<F6>'
+let g:floaterm_keymap_next = '<F7>'
+let g:floaterm_keymap_toggle = '<F12>'
+
+let g:sneak#label = 1
+
 lua require('lspconfig').tsserver.setup{}
 lua require('lspconfig').clangd.setup{}
 lua require('lspconfig').rust_analyzer.setup{}
 lua require('which-key').setup{}
+lua require('lualine').setup()
 
 colorscheme onedark
 
@@ -59,8 +91,15 @@ filetype plugin on
 let mapleader=","
 
 " normal map
+nnoremap Y y$
+nnoremap n nzzzv
+nnoremap N Nzzzv
+
+nnoremap <leader>k :m .-2<CR>==
+nnoremap <leader>j :m .+1<CR>==
 nnoremap <CR> o<Esc>
-nnoremap <leader>u <Esc>:let @/=""<CR>
+
+"nnoremap <leader>u <Esc>:let @/=""<CR> " obsoleted by vim-cool
 nnoremap <leader>et <Esc>:NERDTreeToggle<CR>
 nnoremap <leader>ef <Esc>:NERDTreeFocus<CR>
 nnoremap <leader>w <Esc>:w<CR>
@@ -68,8 +107,26 @@ nnoremap <leader>q <Esc>:q<CR>
 nnoremap <leader>ve <Esc>:tabe ~/AppData/Local/nvim/init.vim<CR>
 nnoremap <leader>vg <Esc>:tabe ~/AppData/Local/nvim/ginit.vim<CR>
 nnoremap <leader>vs <Esc>:source ~/AppData/Local/nvim/init.vim<CR>
-nnoremap < <<
-nnoremap > >>
+
+" LSP
+nnoremap <silent> gd <cmd>lua vim.lsp.buf.definition()<CR>
+nnoremap <silent> gD <cmd>lua vim.lsp.buf.declaration()<CR>
+nnoremap <silent> gr <cmd>lua vim.lsp.buf.references()<CR>
+nnoremap <silent> gi <cmd>lua vim.lsp.buf.implementation()<CR>
+nnoremap <silent> <leader>lh <cmd>lua vim.lsp.buf.hover()<CR>
+nnoremap <silent> <leader>ls <cmd>lua vim.lsp.buf.signature_help()<CR>
+nnoremap <silent> <leader>lk <cmd>lua vim.lsp.diagnostic.goto_prev()<CR>
+nnoremap <silent> <leader>lj <cmd>lua vim.lsp.diagnostic.goto_next()<CR>
+
+" there is also:
+" incoming_calls
+" list_workspace_folders
+" outgoing_calls
+" range_code_action
+" references
+" rename
+" type_definintion
+" workspace_symbol
 
 " quickfix list
 nnoremap <leader>c :copen<CR>
@@ -93,17 +150,54 @@ nnoremap <leader>gb :Git blame<CR>
 vnoremap <leader>. <Esc>
 vnoremap < <gv
 vnoremap > >gv
+vnoremap <C-j> :m '>+1<CR>gv=gv
+vnoremap <C-k> :m '<-2<CR>gv=gv
 
 " input map
 inoremap <leader>. <Esc>
 inoremap ( ()<left>
+"inoremap (<CR> (<CR>)<Esc>O
 inoremap { {}<left>
+"inoremap {<CR> {<CR>}<Esc>O
 inoremap [ []<left>
-
+"inoremap [<CR> [<CR>]<Esc>O
+inoremap " ""<left>
+inoremap <C-j> <esc>:m .+1<CR>==a
+inoremap <C-k> <esc>:m .-2<CR>==a
 
 " project specific
 autocmd! BufNewFile,BufRead *.dd setlocal ft=c
 
 let g:completion_matching_strategy_list = ['exact', 'substring', 'fuzzy']
 
-" lua require'nvim_lsp'.tsserver.setup{ on_attach=require'completion'.on_attach }
+lua <<EOF
+require'nvim-treesitter.configs'.setup {
+  -- One of "all", "maintained" (parsers with maintainers), or a list of languages
+  ensure_installed = "maintained",
+
+  -- Install languages synchronously (only applied to `ensure_installed`)
+  sync_install = false,
+
+  -- List of parsers to ignore installing
+  -- ignore_install = { "javascript" },
+
+  highlight = {
+    -- `false` will disable the whole extension
+    enable = true,
+
+    -- Setting this to true will run `:h syntax` and tree-sitter at the same time.
+    -- Set this to `true` if you depend on 'syntax' being enabled (like for indentation).
+    -- Using this option may slow down your editor, and you may see some duplicate highlights.
+    -- Instead of true it can also be a list of languages
+    additional_vim_regex_highlighting = false,
+  },
+
+  indent = {
+	  enable = true,
+  },
+
+  incremental_selection = {
+	  enable = true,
+  },
+}
+EOF
