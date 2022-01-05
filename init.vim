@@ -17,13 +17,14 @@ Plug 'justinmk/vim-sneak'
 Plug 'yamatsum/nvim-cursorline'
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 "Plug 'nvim-lua/completion-nvim'
+Plug 'kien/rainbow_parentheses.vim'
 
 " ui plugins
 Plug 'folke/which-key.nvim'
 "Plug 'bling/vim-airline'
 "Plug 'vim-airline/vim-airline-themes'
 Plug 'nvim-lualine/lualine.nvim'
-Plug 'akinsho/bufferline.nvim'
+"Plug 'akinsho/bufferline.nvim'
 
 " utility plugins
 Plug 'nvim-lua/plenary.nvim'
@@ -31,10 +32,12 @@ Plug 'kyazdani42/nvim-web-devicons'
 
 " file browsing & operating system
 Plug 'mhinz/vim-startify'
-Plug 'ctrlpvim/ctrlp.vim'
+"Plug 'ctrlpvim/ctrlp.vim'
 Plug 'nvim-telescope/telescope.nvim'
 Plug 'scrooloose/nerdtree'
 Plug 'voldikss/vim-floaterm'
+Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
+Plug 'junegunn/fzf.vim'
 
 " git
 Plug 'tpope/vim-fugitive'
@@ -46,10 +49,11 @@ Plug 'joshdick/onedark.vim'
 Plug 'tomasr/molokai'
 Plug 'tomasiser/vim-code-dark'
 Plug 'folke/tokyonight.nvim', { 'branch': 'main' }
+Plug 'morhetz/gruvbox'
 
 call plug#end()
 
-colorscheme tokyonight
+colorscheme gruvbox
 
 let g:gitgutter_git_excecutable = 'C:\Program Files\Git\bin\git.exe'
 let g:gitgutter_sign_added = '▌'
@@ -68,12 +72,12 @@ let g:floaterm_borderchars = '─│─│╭╮╯╰'
 hi Floaterm guibg=black
 hi FloatermBorder guibg=none guifg=cyan
 
-lua require('lspconfig').tsserver.setup{}
-lua require('lspconfig').clangd.setup{}
-lua require('lspconfig').rust_analyzer.setup{}
+"lua require('lspconfig').tsserver.setup{}
+"lua require('lspconfig').clangd.setup{}
+"lua require('lspconfig').rust_analyzer.setup{}
 lua require('which-key').setup{}
 lua require('lualine').setup()
-lua require('bufferline').setup{}
+"lua require('bufferline').setup{}
 
 filetype plugin on
 
@@ -123,6 +127,11 @@ nnoremap <leader>ve <Esc>:tabe ~/AppData/Local/nvim/init.vim<CR>
 nnoremap <leader>vg <Esc>:tabe ~/AppData/Local/nvim/ginit.vim<CR>
 nnoremap <leader>vs <Esc>:source ~/AppData/Local/nvim/init.vim<CR>
 
+" Telescope
+nnoremap <leader>ff <cmd>Telescope find_files<CR>
+nnoremap <leader>fg <cmd>Telescope live_grep<CR>
+nnoremap <leader>fb <cmd>Telescope current_buffer_fuzzy_find fuzzy=true case_mode=ignore_case<CR>
+
 " LSP
 nnoremap <silent> gd <cmd>lua vim.lsp.buf.definition()<CR>
 nnoremap <silent> gD <cmd>lua vim.lsp.buf.declaration()<CR>
@@ -163,6 +172,11 @@ nnoremap <leader>gs :G<CR>
 nnoremap <leader>gd :Gdiff<CR>
 nnoremap <leader>gb :Git blame<CR>
 
+nmap <leader>hj :GitGutterNextHunk<CR>
+nmap <leader>hk :GitGutterPrevHunk<CR>
+"nmap gt :BufferLineCycleNext<CR>
+"nmap gT :BufferLineCyclePrev<CR>
+
 " visual map
 vnoremap <leader>. <Esc>
 vnoremap < <gv
@@ -187,37 +201,37 @@ autocmd! BufNewFile,BufRead *.dd setlocal ft=c
 
 let g:completion_matching_strategy_list = ['exact', 'substring', 'fuzzy']
 
-lua <<EOF
-require'nvim-treesitter.configs'.setup {
-  -- One of "all", "maintained" (parsers with maintainers), or a list of languages
-  ensure_installed = "maintained",
+"lua <<EOF
+"require'nvim-treesitter.configs'.setup {
+  "-- One of "all", "maintained" (parsers with maintainers), or a list of languages
+  "ensure_installed = "maintained",
 
-  -- Install languages synchronously (only applied to `ensure_installed`)
-  sync_install = false,
+  "-- Install languages synchronously (only applied to `ensure_installed`)
+  "sync_install = false,
 
-  -- List of parsers to ignore installing
-  -- ignore_install = { "javascript" },
+  "-- List of parsers to ignore installing
+  "-- ignore_install = { "javascript" },
 
-  highlight = {
-    -- `false` will disable the whole extension
-    enable = true,
+  "highlight = {
+    "-- `false` will disable the whole extension
+    "enable = true,
 
-    -- Setting this to true will run `:h syntax` and tree-sitter at the same time.
-    -- Set this to `true` if you depend on 'syntax' being enabled (like for indentation).
-    -- Using this option may slow down your editor, and you may see some duplicate highlights.
-    -- Instead of true it can also be a list of languages
-    additional_vim_regex_highlighting = false,
-  },
+    "-- Setting this to true will run `:h syntax` and tree-sitter at the same time.
+    "-- Set this to `true` if you depend on 'syntax' being enabled (like for indentation).
+    "-- Using this option may slow down your editor, and you may see some duplicate highlights.
+    "-- Instead of true it can also be a list of languages
+    "additional_vim_regex_highlighting = false,
+  "},
 
-  indent = {
-	  enable = true,
-  },
+  "indent = {
+	  "enable = true,
+  "},
 
-  incremental_selection = {
-	  enable = true,
-  },
-}
-EOF
+  "incremental_selection = {
+	  "enable = true,
+  "},
+"}
+"EOF
 
 " which key plugin
 let g:which_key_map = {}
@@ -239,3 +253,14 @@ let g:which_key_map['q'] = [ '<Esc>:q', 'close buffer' ]
 let g:which_key_map['w'] = [ '<Esc>:w', 'save buffer' ]
 
 "call which_key#register(',', "g:which_key_map")
+let g:startify_custom_header = [
+		\ "   ooooo      ooo oooooooooooo   .oooooo.   oooooo     oooo ooooo ooo        ooooo ",
+		\ "   `888b.     `8' `888'     `8  d8P'  `Y8b   `888.     .8'  `888' `88.       .888' ",
+		\ "    8 `88b.    8   888         888      888   `888.   .8'    888   888b     d'888  ",
+		\ "    8   `88b.  8   888oooo8    888      888    `888. .8'     888   8 Y88. .P  888  ",
+		\ "    8     `88b.8   888    \"    888      888     `888.8'      888   8  `888'   888  ",
+		\ "    8       `888   888       o `88b    d88'      `888'       888   8    Y     888  ",
+		\ "   o8o        `8  o888ooooood8  `Y8bood8P'        `8'       o888o o8o        o888o ",
+		\ ]
+
+
