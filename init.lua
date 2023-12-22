@@ -35,7 +35,7 @@ require('packer').startup(function(use)
     use 'yamatsum/nvim-cursorline'
     -- use 'neoclide/coc.nvim', {'branch': 'release'}
     -- use 'pappasam/coc-jedi', { 'do': 'yarn install --frozen-lockfile && yarn build', 'branch': 'main' }
-    -- use 'windwp/nvim-autopairs'
+    use 'windwp/nvim-autopairs'
 
     -- Completion framework:
     use 'hrsh7th/nvim-cmp'
@@ -53,7 +53,7 @@ require('packer').startup(function(use)
     use 'hrsh7th/cmp-cmdline'
 
     -- ui plugins
-    -- use 'folke/which-key.nvim'
+    use 'folke/which-key.nvim'
     use 'nvim-lualine/lualine.nvim'
 
     -- utility plugins
@@ -71,7 +71,7 @@ require('packer').startup(function(use)
 
     -- colorschemes
     -- use 'jacoborus/tender'
-    -- use 'joshdick/onedark.vim'
+    use 'joshdick/onedark.vim'
     -- use 'tomasr/molokai'
     use 'morhetz/gruvbox'
 
@@ -111,24 +111,24 @@ vim.cmd([[
     set foldexpr=nvim_treesitter#foldexpr()
 ]])
 
-vim.cmd([[colorscheme gruvbox]])
+vim.cmd([[colorscheme onedark]])
 
 -- mappings
 vim.g.mapleader = ','
 
-function map(mode, shortcut, command)
+local function map(mode, shortcut, command)
     vim.api.nvim_set_keymap(mode, shortcut, command, { noremap = true, silent = true })
 end
 
-function nmap(shortcut, command)
+local function nmap(shortcut, command)
     map('n', shortcut, command)
 end
 
-function imap(shortcut, command)
+local function imap(shortcut, command)
     map('i', shortcut, command)
 end
 
-function vmap(shortcut, command)
+local function vmap(shortcut, command)
     map('v', shortcut, command)
 end
 
@@ -169,6 +169,7 @@ vmap("<C-j>", ":m '>+1<CR>gv=gv")
 vmap("<C-k>", ":m '<-2<CR>gv=gv")
 
 imap("<leader>.", "<Esc>")
+imap("<S-Space>", "<Esc>la")
 imap("<C-j>", "<esc>:m .+1<CR>==a")
 imap("<C-k>", "<esc>:m .-2<CR>==a")
 
@@ -196,7 +197,10 @@ nmap("<silent> <leader>lr", ":LspRestart<CR>")
 
 -- plugin configs
 vim.g['sneak#label'] = 2
+
 require('lualine').setup()
+
+require("nvim-autopairs").setup {}
 
 require("mason").setup({
     ui = {
@@ -434,7 +438,7 @@ vim.cmd([[
   autocmd CursorHold * lua vim.diagnostic.open_float(nil, { focusable = false })
 ]])
 
-vim.opt.completeopt = { 'menu', 'menuone' } --  'noselect', 'noinsert' }
+vim.opt.completeopt = { 'menu', 'menuone', 'noinsert', 'noselect' } --  'noselect', 'noinsert' }
 vim.opt.shortmess = vim.opt.shortmess + { c = true }
 vim.api.nvim_set_option('updatetime', 300)
 
