@@ -55,6 +55,8 @@ require('packer').startup(function(use)
     -- ui plugins
     use 'folke/which-key.nvim'
     use 'nvim-lualine/lualine.nvim'
+    use 'lewis6991/gitsigns.nvim'
+    use 'romgrk/barbar.nvim'
 
     -- utility plugins
     use 'nvim-lua/plenary.nvim'
@@ -74,6 +76,17 @@ require('packer').startup(function(use)
     use 'joshdick/onedark.vim'
     -- use 'tomasr/molokai'
     use 'morhetz/gruvbox'
+
+    -- testing
+    --use {
+        --"nvim-neotest/neotest",
+        --requires = {
+            --"nvim-lua/plenary.nvim",
+            --"antoinemadec/FixCursorHold.nvim",
+            --"nvim-treesitter/nvim-treesitter",
+            --"alfaix/neotest-gtest",
+        --}
+    --}
 
     -- language specific
     use 'simrat39/rust-tools.nvim'
@@ -136,8 +149,9 @@ nmap("Y", "y$") -- yank to end of line
 nmap("n", "nzzzv")
 nmap("N", "Nzzzv")
 
-nmap("<leader>k", ":m .-2<CR>==")
-nmap("<leader>j", ":m .+1<CR>==")
+-- move line up/down in normal (use case?)
+-- nmap("<leader>k", ":m .-2<CR>==")
+-- nmap("<leader>j", ":m .+1<CR>==")
 nmap("<CR>", "o<Esc>")
 
 -- quickfix list
@@ -156,6 +170,8 @@ nmap("<F4>", ':execute "vimgrep /" . expand("<cword>") . "/j **" <Bar> cw<CR>')
 nmap("<F3>", ":vimgrep //j **<left><left><left><left><left>")
 
 -- change windows
+nmap("<Tab>", ":tabn<CR>")
+nmap("<S-Tab>", ":tabp<CR>")
 nmap("H", "<C-w>h")
 nmap("L", "<C-w>l")
 
@@ -183,22 +199,67 @@ nmap("<leader>fr", "m'<cmd>Telescope resume<CR>")
 nmap("<leader>fq", "m'<cmd>Telescope quickfix<CR>")
 
 -- LSP
-nmap("<silent> gd", "<cmd>lua vim.lsp.buf.definition()<CR>")
-nmap("<silent> gD", "<cmd>lua vim.lsp.buf.declaration()<CR>")
-nmap("<silent> gr", "<cmd>lua vim.lsp.buf.references()<CR>")
-nmap("<silent> gi", "<cmd>lua vim.lsp.buf.implementation()<CR>")
+nmap("gd", "<cmd>lua vim.lsp.buf.definition()<CR>")
+nmap("gD", "<cmd>lua vim.lsp.buf.declaration()<CR>")
+nmap("gr", "<cmd>lua vim.lsp.buf.references()<CR>")
+nmap("gi", "<cmd>lua vim.lsp.buf.implementation()<CR>")
 
-nmap("<silent> <leader>lh", "<cmd>lua vim.lsp.buf.hover()<CR>")
-nmap("<silent> <leader>ld", "<cmd>lua vim.diagnostic.open_float()<CR>")
-nmap("<silent> <leader>ls", "<cmd>lua vim.lsp.buf.signature_help()<CR>")
-nmap("<silent> <leader>lk", "<cmd>lua vim.lsp.diagnostic.goto_prev()<CR>")
-nmap("<silent> <leader>lj", "<cmd>lua vim.lsp.diagnostic.goto_next()<CR>")
-nmap("<silent> <leader>lr", ":LspRestart<CR>")
+nmap("<leader>lh", "<cmd>lua vim.lsp.buf.hover()<CR>")
+nmap("<leader>ld", "<cmd>lua vim.diagnostic.open_float()<CR>")
+nmap("<leader>ls", "<cmd>lua vim.lsp.buf.signature_help()<CR>")
+nmap("<leader>lk", "<cmd>lua vim.lsp.diagnostic.goto_prev()<CR>")
+nmap("<leader>lj", "<cmd>lua vim.lsp.diagnostic.goto_next()<CR>")
+nmap("<leader>la", "<cmd>lua vim.lsp.buf.code_action()<CR>")
+nmap("<leader>lr", ":LspRestart<CR>")
 
 -- plugin configs
 vim.g['sneak#label'] = 2
 
 require('lualine').setup()
+
+--require('neotest').setup({
+    --adapters = {
+        --require('neotest-gtest').setup({})
+    --}
+--})
+
+local which_key = require('which-key')
+which_key.setup{}
+which_key.register({
+    q = { "<Esc>:q<CR>", "Close file" },
+    w = { "<Esc>:w<CR>", "Save file" },
+    r = {
+        name = "Refactoring",
+        a = {"<cmd>lua vim.lsp.buf.code_action()<CR>", "Code Action"},
+        r = {"<cmd>lua vim.lsp.buf.rename()<CR>", "Rename"},
+    },
+    l = {
+        name = "Diagnostics",
+        h = {"<cmd>lua vim.lsp.buf.hover()<CR>", "Hover"},
+        d = {"<cmd>lua vim.diagnostic.open_float()<CR>", "Diag Messages"},
+        s = {"<cmd>lua vim.lsp.buf.signature_help()<CR>", "Signature Help"},
+        k = {"<cmd>lua vim.lsp.diagnostic.goto_prev()<CR>", "Goto Previous Diag"},
+        j = {"<cmd>lua vim.lsp.diagnostic.goto_next()<CR>", "Goto Next Diag"},
+        r = {":LspRestart<CR>", "Restart LSP"},
+    },
+    f = {
+        name = "Telescope",
+        f = {"<cmd>Telescope find_files<cr>", "Find File"},
+        g = {"<cmd>Telescope live_grep<CR>", "Live Grep"},
+        s = {"<cmd>Telescope grep_string<CR>", "Grep String"},
+        t = {"<cmd>Telescope treesitter<CR>", "List Symbols"},
+        b = {"<cmd>Telescope current_buffer_fuzzy_find fuzzy=true case_mode=ignore_case<CR>", "Buffer Fuzzy Find"},
+        r = {"<cmd>Telescope resume<CR>", "Resume"},
+        q = {"<cmd>Telescope quickfix<CR>", "Quickfix List"},
+    },
+    g = {
+        name = "Goto",
+        d = {"<cmd>lua vim.lsp.buf.definition()<CR>", "Definition"},
+        D = {"<cmd>lua vim.lsp.buf.declaration()<CR>", "Declaration"},
+        r = {"<cmd>lua vim.lsp.buf.references()<CR>", "References"},
+        i = {"<cmd>lua vim.lsp.buf.implementation()<CR>", "Implementation"},
+    }
+}, { prefix = "<leader>"})
 
 require("nvim-autopairs").setup {}
 
@@ -207,7 +268,7 @@ require("mason").setup({
         icons = {
             package_installed = "✅",
             package_pending = "⏳",
-            package_uninstalled = "🙋‍♂️",
+            package_uninstalled = "📦",
         },
     }
 })
@@ -506,16 +567,29 @@ cmp.setup({
 
 -- LSP servers
 -- require('nvim-lsp-installer').setup {}
--- local lspconfig = require("lspconfig")
+local lspconfig = require("lspconfig")
+lspconfig.clangd.setup{}
 
 -- local function on_attach(client, bufnr)
 --     -- set up buffer keymaps, etc.
 -- end
 
 -- -- lua require('lspconfig').tsserver.setup{}
--- -- lua require('lspconfig').clangd.setup{}
+-- lua require('lspconfig').clangd.setup{}
 -- lspconfig.rust_analyzer.setup {
 --     on_attach = on_attach
 -- }
 -- -- lua require('lspconfig').jedi_language_server.setup{on_attach=on_attach}
 -- lspconfig.pyright.setup { on_attach = on_attach }
+
+local function source_folder_specific_config()
+    local cwd = vim.fn.getcwd()
+    local config_path = cwd .. "/.nvim/config.lua"
+
+    -- check if config.lua exists
+    if vim.fn.filereadable(config_path) == 1 then
+        vim.cmd("source " .. config_path)
+    end
+end
+
+source_folder_specific_config()
