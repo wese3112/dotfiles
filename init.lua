@@ -68,25 +68,29 @@ require('packer').startup(function(use)
     -- use 'voldikss/vim-floaterm'
 
     -- git
-    -- use 'tpope/vim-fugitive'
-    -- use 'airblade/vim-gitgutter'
+     use 'tpope/vim-fugitive'
+     use 'airblade/vim-gitgutter'
 
     -- colorschemes
-    -- use 'jacoborus/tender'
+    use 'jacoborus/tender'
     use 'joshdick/onedark.vim'
-    -- use 'tomasr/molokai'
+    use 'tomasr/molokai'
     use 'morhetz/gruvbox'
+    use 'endel/vim-github-colorscheme'
+    use 'ayu-theme/ayu-vim'
+    use { 'catppuccin/nvim', as = 'catppuccin' }
 
     -- testing
-    --use {
-        --"nvim-neotest/neotest",
-        --requires = {
-            --"nvim-lua/plenary.nvim",
-            --"antoinemadec/FixCursorHold.nvim",
-            --"nvim-treesitter/nvim-treesitter",
+    use {
+        "nvim-neotest/neotest",
+        requires = {
+            "nvim-lua/plenary.nvim",
+            "antoinemadec/FixCursorHold.nvim",
+            "nvim-treesitter/nvim-treesitter",
             --"alfaix/neotest-gtest",
-        --}
-    --}
+            "rouge8/neotest-rust",
+        }
+    }
 
     -- language specific
     use 'simrat39/rust-tools.nvim'
@@ -105,12 +109,12 @@ vim.cmd([[
     set number
     set relativenumber
     "set autoindent
-    set autochdir
+    "set autochdir
     set noeb vb t_vb=  " disable error bell etc.
     set ignorecase
     set nocompatible
     set cursorline
-    set completeopt=menuone,noinsert,noselect
+    " set completeopt=menuone,noinsert,noselect
     set mouse=a
     set nowrap
     set splitbelow
@@ -189,39 +193,20 @@ imap("<S-Space>", "<Esc>la")
 imap("<C-j>", "<esc>:m .+1<CR>==a")
 imap("<C-k>", "<esc>:m .-2<CR>==a")
 
--- plugin mappings
--- Telescope
-nmap("<leader>ff", "m'<cmd>Telescope find_files<CR>")
-nmap("<leader>fg", "m'<cmd>Telescope live_grep<CR>")
-nmap("<leader>fs", "m'<cmd>Telescope grep_string<CR>")
-nmap("<leader>fb", "m'<cmd>Telescope current_buffer_fuzzy_find fuzzy=true case_mode=ignore_case<CR>")
-nmap("<leader>fr", "m'<cmd>Telescope resume<CR>")
-nmap("<leader>fq", "m'<cmd>Telescope quickfix<CR>")
-
--- LSP
-nmap("gd", "<cmd>lua vim.lsp.buf.definition()<CR>")
-nmap("gD", "<cmd>lua vim.lsp.buf.declaration()<CR>")
-nmap("gr", "<cmd>lua vim.lsp.buf.references()<CR>")
-nmap("gi", "<cmd>lua vim.lsp.buf.implementation()<CR>")
-
-nmap("<leader>lh", "<cmd>lua vim.lsp.buf.hover()<CR>")
-nmap("<leader>ld", "<cmd>lua vim.diagnostic.open_float()<CR>")
-nmap("<leader>ls", "<cmd>lua vim.lsp.buf.signature_help()<CR>")
-nmap("<leader>lk", "<cmd>lua vim.lsp.diagnostic.goto_prev()<CR>")
-nmap("<leader>lj", "<cmd>lua vim.lsp.diagnostic.goto_next()<CR>")
-nmap("<leader>la", "<cmd>lua vim.lsp.buf.code_action()<CR>")
-nmap("<leader>lr", ":LspRestart<CR>")
-
 -- plugin configs
 vim.g['sneak#label'] = 2
 
 require('lualine').setup()
 
---require('neotest').setup({
-    --adapters = {
+require('neotest').setup({
+    adapters = {
         --require('neotest-gtest').setup({})
-    --}
---})
+        require('neotest-rust')
+    }
+})
+
+vim.g.gitgutter_sign_added = '▌'
+vim.g.gitgutter_sign_modified = '▌'
 
 local which_key = require('which-key')
 which_key.setup{}
@@ -258,6 +243,25 @@ which_key.register({
         D = {"<cmd>lua vim.lsp.buf.declaration()<CR>", "Declaration"},
         r = {"<cmd>lua vim.lsp.buf.references()<CR>", "References"},
         i = {"<cmd>lua vim.lsp.buf.implementation()<CR>", "Implementation"},
+    },
+    t = {
+        name = "Neo-Test",
+        o = {"<cmd>lua require('neotest').summary.open()<cr>", "Open Summary"},
+        t = {"<cmd>lua require('neotest').run.run(vim.fn.expand('%'))<cr>", "Run Tests"},
+        l = {"<cmd>lua require('neotest').run.run_last()<cr>", "Rerun Last Test"},
+        s = {"<cmd>lua require('neotest').run.stop()<cr>", "Stop Running Process"},
+        w = {"<cmd>lua require('neotest').watch.watch()<cr>", "Watch"},
+    },
+    G = {
+        name = "Git",
+        s = {"<cmd>G<cr>", "Git Status"},
+        d = {"<cmd>Gdiff<cr>", "Git Diff"},
+        b = {"<cmd>Git blame<cr>", "Git Blame"},
+        h = {
+            name = "Hunk",
+            n = {"<cmd>GitGutterNextHunk<cr>", "Next Hunk"},
+            p = {"<cmd>GitGutterPrevHunk<cr>", "Previous Hunk"},
+        }
     }
 }, { prefix = "<leader>"})
 
