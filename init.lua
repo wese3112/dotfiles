@@ -1,3 +1,8 @@
+-- required by nvim-tree
+-- disable netrw at the very start of your init.lua
+vim.g.loaded_netrw = 1
+vim.g.loaded_netrwPlugin = 1
+
 local ensure_packer = function()
     local fn = vim.fn
     local install_path = fn.stdpath('data') .. '/site/pack/packer/start/packer.nvim'
@@ -19,12 +24,9 @@ require('packer').startup(function(use)
     use 'scrooloose/nerdcommenter'
     use 'mg979/vim-visual-multi'
 
-    -- management
+    -- lsp management
     use 'williamboman/mason.nvim'
     use 'williamboman/mason-lspconfig.nvim'
-
-    -- language tools
-    -- use 'williamboman/nvim-lsp-installer'
     use 'neovim/nvim-lspconfig'
     use { 'nvim-treesitter/nvim-treesitter', run = ':TSUpdate' }
     use 'mfussenegger/nvim-dap' -- debugger adapter tool
@@ -36,12 +38,11 @@ require('packer').startup(function(use)
     -- use 'neoclide/coc.nvim', {'branch': 'release'}
     -- use 'pappasam/coc-jedi', { 'do': 'yarn install --frozen-lockfile && yarn build', 'branch': 'main' }
     use 'windwp/nvim-autopairs'
+    use 'Pocco81/true-zen.nvim'
 
     -- Completion framework:
     use 'hrsh7th/nvim-cmp'
-
-    -- LSP completion source:
-    use 'hrsh7th/cmp-nvim-lsp'
+    use 'hrsh7th/cmp-nvim-lsp' -- LSP completion source:
 
     -- Useful completion sources:
     use 'hrsh7th/cmp-nvim-lua'
@@ -56,7 +57,12 @@ require('packer').startup(function(use)
     use 'folke/which-key.nvim'
     use 'nvim-lualine/lualine.nvim'
     use 'lewis6991/gitsigns.nvim'
-    use 'romgrk/barbar.nvim'
+    use {
+        'nvim-tree/nvim-tree.lua',
+        requires = {
+            'nvim-tree/nvim-web-devicons', -- optional
+        },
+    }
 
     -- utility plugins
     use 'nvim-lua/plenary.nvim'
@@ -94,6 +100,9 @@ require('packer').startup(function(use)
 
     -- language specific
     use 'simrat39/rust-tools.nvim'
+
+    -- compatibility
+    use 'christoomey/vim-tmux-navigator'
 
     -- Automatically set up your configuration after cloning packer.nvim
     -- Put this at the end after all plugins
@@ -153,9 +162,6 @@ nmap("Y", "y$") -- yank to end of line
 nmap("n", "nzzzv")
 nmap("N", "Nzzzv")
 
--- move line up/down in normal (use case?)
--- nmap("<leader>k", ":m .-2<CR>==")
--- nmap("<leader>j", ":m .+1<CR>==")
 nmap("<CR>", "o<Esc>")
 
 -- quickfix list
@@ -165,6 +171,10 @@ nmap("<up>", ":cp<CR>zz")
 nmap("<right>", ":cc<CR>zz")
 nmap("<leader>cl", ":cclose<CR>")
 
+-- symbols
+nmap("gd", "<cmd>lua vim.lsp.buf.definition()<CR>")
+nmap("gb", "<C-o>")
+
 -- scroll
 nmap("J", "5<C-e>")
 nmap("K", "5<C-y>")
@@ -172,6 +182,12 @@ nmap("K", "5<C-y>")
 -- search with vimgrep
 nmap("<F4>", ':execute "vimgrep /" . expand("<cword>") . "/j **" <Bar> cw<CR>')
 nmap("<F3>", ":vimgrep //j **<left><left><left><left><left>")
+
+-- tmux integration
+nmap("<c-h>", "<cmd> TmuxNavigateLeft<cr>")
+nmap("<c-j>", "<cmd> TmuxNavigateDown<cr>")
+nmap("<c-k>", "<cmd> TmuxNavigateUp<cr>")
+nmap("<c-l>", "<cmd> TmuxNavigateRight<cr>")
 
 -- change windows
 nmap("<Tab>", ":tabn<CR>")
@@ -188,6 +204,9 @@ vmap(">", ">gv")
 vmap("<C-j>", ":m '>+1<CR>gv=gv")
 vmap("<C-k>", ":m '<-2<CR>gv=gv")
 
+vmap("<leader>zn", ':TZNarrow<cr>:lua vim.wo[vim.api.nvim_get_current_win()].foldmethod="manual"<cr>')
+vmap("<leader>zl", ":TZNarrow<cr>", "Leave Narrow") -- leave narrow
+
 imap("<leader>.", "<Esc>")
 imap("<S-Space>", "<Esc>la")
 imap("<C-j>", "<esc>:m .+1<CR>==a")
@@ -200,8 +219,21 @@ require('lualine').setup()
 
 require('neotest').setup({
     adapters = {
-        --require('neotest-gtest').setup({})
+        --require('neotest-gtest').setup({}),
         require('neotest-rust')
+    }
+})
+
+require('telescope').setup{
+    defaults = {
+        layout_strategy = 'vertical',
+        layout_config = { width = 0.95 },
+    },
+}
+
+require('nvim-tree').setup({
+    view = {
+        width = 50,
     }
 })
 
@@ -233,9 +265,12 @@ which_key.register({
         g = {"<cmd>Telescope live_grep<CR>", "Live Grep"},
         s = {"<cmd>Telescope grep_string<CR>", "Grep String"},
         t = {"<cmd>Telescope treesitter<CR>", "List Symbols"},
+        d = {"<cmd>Telescope diagnostics<CR>", "Diagnostics"},
         b = {"<cmd>Telescope current_buffer_fuzzy_find fuzzy=true case_mode=ignore_case<CR>", "Buffer Fuzzy Find"},
         r = {"<cmd>Telescope resume<CR>", "Resume"},
         q = {"<cmd>Telescope quickfix<CR>", "Quickfix List"},
+        k = {"<cmd>Telescope keymaps<CR>", "Keymaps"},
+        B = {"<cmd>Telescope builtin<CR>", "Builtins"},
     },
     g = {
         name = "Goto",
@@ -262,6 +297,14 @@ which_key.register({
             n = {"<cmd>GitGutterNextHunk<cr>", "Next Hunk"},
             p = {"<cmd>GitGutterPrevHunk<cr>", "Previous Hunk"},
         }
+    },
+    n = {
+        name = "NTree",
+        t = {"<cmd>:NvimTreeToggle<cr>", "Toggle Tree"},
+        --f = {"<cmd>:NvimTreeFocus<cr>", "Focus Tree"},
+        f = {"<cmd>:NvimTreeFindFile<cr>", "Show in Tree"},
+        c = {"<cmd>:NvimTreeCollapse<cr>", "Collapse Tree"},
+        r = {"<cmd>:NvimTreeResize<cr>", "Resize Tree"},
     }
 }, { prefix = "<leader>"})
 
@@ -503,7 +546,8 @@ vim.cmd([[
   autocmd CursorHold * lua vim.diagnostic.open_float(nil, { focusable = false })
 ]])
 
-vim.opt.completeopt = { 'menu', 'menuone', 'noinsert', 'noselect' } --  'noselect', 'noinsert' }
+--vim.opt.completeopt = { 'menu', 'menuone', 'noinsert', 'noselect' } --  'noselect', 'noinsert' }
+vim.opt.completeopt = { 'menu', 'menuone', 'preview', 'noinsert', 'noselect' } --  'noselect', 'noinsert' }
 vim.opt.shortmess = vim.opt.shortmess + { c = true }
 vim.api.nvim_set_option('updatetime', 300)
 
@@ -535,7 +579,8 @@ cmp.setup({
         ['<C-f>'] = cmp.mapping.scroll_docs(4),
         ['<C-Space>'] = cmp.mapping.complete(),
         ['<C-e>'] = cmp.mapping.close(),
-        ['<CR>'] = cmp.mapping.confirm({
+        -- this is annoying! cannot 
+        ['<C-l>'] = cmp.mapping.confirm({
             behavior = cmp.ConfirmBehavior.Insert,
             select = true,
         })
