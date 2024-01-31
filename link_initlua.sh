@@ -1,1 +1,1 @@
-ln -s /home/pi/Downloads/dotfiles/init.lua /home/pi/.config/nvim/init.lua
+ln -s $HOME/Downloads/dotfiles/init.lua $HOME/.config/nvim/init.lua
