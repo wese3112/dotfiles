@@ -137,7 +137,7 @@ vim.cmd([[
     set foldexpr=nvim_treesitter#foldexpr()
 ]])
 
-vim.cmd([[colorscheme onedark]])
+vim.cmd([[colorscheme catppuccin]])
 
 -- mappings
 vim.g.mapleader = ','
@@ -629,7 +629,7 @@ lspconfig.clangd.setup{}
 --     on_attach = on_attach
 -- }
 -- -- lua require('lspconfig').jedi_language_server.setup{on_attach=on_attach}
--- lspconfig.pyright.setup { on_attach = on_attach }
+lspconfig.pyright.setup { on_attach = on_attach }
 
 local function source_folder_specific_config()
     local cwd = vim.fn.getcwd()
