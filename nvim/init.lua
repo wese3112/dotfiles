@@ -3,6 +3,8 @@
 vim.g.loaded_netrw = 1
 vim.g.loaded_netrwPlugin = 1
 
+require("autocmds")
+
 local ensure_packer = function()
     local fn = vim.fn
     local install_path = fn.stdpath('data') .. '/site/pack/packer/start/packer.nvim'
@@ -630,6 +632,7 @@ lspconfig.clangd.setup{}
 -- }
 -- -- lua require('lspconfig').jedi_language_server.setup{on_attach=on_attach}
 lspconfig.pyright.setup { on_attach = on_attach }
+lspconfig.omnisharp.setup{}
 
 local function source_folder_specific_config()
     local cwd = vim.fn.getcwd()
