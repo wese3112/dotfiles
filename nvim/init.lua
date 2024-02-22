@@ -41,6 +41,10 @@ require('packer').startup(function(use)
     -- use 'pappasam/coc-jedi', { 'do': 'yarn install --frozen-lockfile && yarn build', 'branch': 'main' }
     use 'windwp/nvim-autopairs'
     use 'Pocco81/true-zen.nvim'
+    use {
+        'danymat/neogen',
+        requires = 'nvim-treesitter/nvim-treesitter'
+    }
 
     -- Completion framework:
     use 'hrsh7th/nvim-cmp'
@@ -238,6 +242,8 @@ require('nvim-tree').setup({
         width = 50,
     }
 })
+
+require('neogen').setup{}
 
 vim.g.gitgutter_sign_added = '▌'
 vim.g.gitgutter_sign_modified = '▌'
