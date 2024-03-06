@@ -12,6 +12,7 @@ local function file_exists(name)
     end
 end
 
+-- Python
 vim.api.nvim_create_autocmd({ "BufWritePost" }, {
     pattern = { "*.py" },
     desc = "autoformat Python files after saving using black",
@@ -22,6 +23,18 @@ vim.api.nvim_create_autocmd({ "BufWritePost" }, {
     group = aucmd_group,
 })
 
+-- Rust
+vim.api.nvim_create_autocmd({ "BufWritePost" }, {
+    pattern = { "*.rs" },
+    desc = "autoformat Rust files after saving using rustfmt",
+    callback = function()
+        local fn = vim.api.nvim_buf_get_name(0)
+        vim.cmd(':silent exec "!rustfmt ' .. fn .. '"')
+    end,
+    group = aucmd_group,
+})
+
+-- C#
 --vim.api.nvim_create_autocmd({ "BufWritePost" }, {
     --pattern = { "*.cs" },
     --desc = "autoformat C# files after saving using csharpier",
@@ -32,6 +45,7 @@ vim.api.nvim_create_autocmd({ "BufWritePost" }, {
     --group = aucmd_group,
 --})
 
+-- C++
 vim.api.nvim_create_autocmd({ "BufWritePost" }, {
     pattern = { "*.cxx", "*.hxx" },
     desc = "autoformat C++ files after saving using clang-format",

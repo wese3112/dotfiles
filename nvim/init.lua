@@ -76,7 +76,13 @@ require('packer').startup(function(use)
 
     -- file browsing & operating system
     use 'mhinz/vim-startify'
-    use 'nvim-telescope/telescope.nvim'
+    use {
+        'nvim-telescope/telescope.nvim',
+        requires = {
+            'nvim-lua/plenary.nvim',
+            'frantisekstanko/telescope-git-diff'
+        }
+    }
     -- use 'voldikss/vim-floaterm'
 
     -- git
@@ -215,8 +221,6 @@ vmap("<leader>zl", ":TZNarrow<cr>", "Leave Narrow") -- leave narrow
 
 imap("<leader>.", "<Esc>")
 imap("<S-Space>", "<Esc>la")
-imap("<C-j>", "<esc>:m .+1<CR>==a")
-imap("<C-k>", "<esc>:m .-2<CR>==a")
 
 -- plugin configs
 vim.g['sneak#label'] = 2
@@ -230,12 +234,15 @@ require('neotest').setup({
     }
 })
 
-require('telescope').setup{
+local telescope = require('telescope')
+telescope.setup{
     defaults = {
         layout_strategy = 'vertical',
         layout_config = { width = 0.95 },
     },
 }
+telescope.load_extension('git_diff')
+
 
 require('nvim-tree').setup({
     view = {
@@ -279,6 +286,7 @@ which_key.register({
         q = {"<cmd>Telescope quickfix<CR>", "Quickfix List"},
         k = {"<cmd>Telescope keymaps<CR>", "Keymaps"},
         B = {"<cmd>Telescope builtin<CR>", "Builtins"},
+        u = {"<cmd>Telescope buffers<CR>", "Buffers"},
     },
     g = {
         name = "Goto",
@@ -580,6 +588,8 @@ cmp.setup({
     mapping = {
         ['<C-p>'] = cmp.mapping.select_prev_item(),
         ['<C-n>'] = cmp.mapping.select_next_item(),
+        ['<C-j>'] = cmp.mapping.select_next_item(),
+        ['<C-k>'] = cmp.mapping.select_prev_item(),
         -- Add tab support
         ['<S-Tab>'] = cmp.mapping.select_prev_item(),
         ['<Tab>'] = cmp.mapping.select_next_item(),
